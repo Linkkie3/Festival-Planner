@@ -111,16 +111,96 @@ public class Planner extends JInternalFrame{
             	String endMinute = endMinuteField.getText();
             	try
             	{
-            		int width = Integer.parseInt(stageWidth);
-            		int height = Integer.parseInt(stageHeight);
-            		int number = Integer.parseInt(stageNumber);
-            		int estimatedPop = Integer.parseInt(estimatedPopularity);
-            		int sHour = Integer.parseInt(startHour);
-            		int sMinute = Integer.parseInt(startMinutes);
-            		int eHour = Integer.parseInt(endHour);
-            		int eMinute = Integer.parseInt(endMinute);
-            		Agenda.getInstance().addButton(new Event(new Stage(width,height,number),new Artist(name), estimatedPop, sHour,sMinute, eHour,eMinute));
-            		Agenda.getInstance().setStatusMessage("You have succesfully entered a new event.");
+            		boolean add = true;
+            		int width = -1;
+            		if((Integer.parseInt(stageWidth) > 0))
+            			width = Integer.parseInt(stageWidth);
+            		else{
+            			Agenda.getInstance().setStatusMessage("The width of your stage cannot be below 0.");
+            			add = false;
+            		}
+            		int height = -1;
+            		if((Integer.parseInt(stageHeight) > 0))
+            			height = Integer.parseInt(stageHeight);
+            		else{
+            			Agenda.getInstance().setStatusMessage("The height of your stage cannot be below 0.");
+            			add = false;
+            		}
+            		int number = -1;
+            		if((Integer.parseInt(stageNumber) > 0) && (Integer.parseInt(stageNumber) <= 3))
+            			number = Integer.parseInt(stageNumber);
+            		else{
+            			Agenda.getInstance().setStatusMessage("The stagenumber must be between 0 and 3");
+            			add = false;
+            		}
+            		int estimatedPop = -1;
+            		if(Integer.parseInt(estimatedPopularity) > 0)
+            			estimatedPop = Integer.parseInt(estimatedPopularity);
+            		else{
+            			Agenda.getInstance().setStatusMessage("The estimated popularity cannot be below 0.");
+            			add = false;
+            		}
+            		
+            		int sHour = -1;
+            		if((Integer.parseInt(startHour) <= 25)){	
+            			if(Integer.parseInt(startHour) == 25)
+            				if(Integer.parseInt(startMinutes) == 0)
+            					Integer.parseInt(startHour);
+            				else{
+                    			Agenda.getInstance().setStatusMessage("Your start time is not correct.");
+                				add = false;
+            			}else
+                			sHour = Integer.parseInt(startHour);
+            		}else{
+            			Agenda.getInstance().setStatusMessage("Your start time is not correct.");
+        				add = false;
+            		}
+            		int sMinute = -1;
+            		if((Integer.parseInt(startMinutes) >= 0) && (Integer.parseInt(startMinutes) <= 60))
+            			sMinute = Integer.parseInt(startMinutes);
+            		else{
+            			Agenda.getInstance().setStatusMessage("Your start time is not correct.");
+        				add = false;
+            		}
+
+            		int eHour = -1;
+            		if((Integer.parseInt(endHour) <= 25)){	
+            			if(Integer.parseInt(endHour) == 25)
+            			{
+            				if(Integer.parseInt(endMinute) == 0)
+            					eHour = Integer.parseInt(endHour);
+            				else
+            				{
+                    			Agenda.getInstance().setStatusMessage("Your end time is not correct.");
+                				add = false;
+            				}
+            			}
+            			else
+                			eHour = Integer.parseInt(endHour);
+            		}else{
+            			Agenda.getInstance().setStatusMessage("Your end time is not correct.");
+        				add = false;
+            		}
+            		int eMinute = -1;
+            		
+            		if((Integer.parseInt(endMinute) >= 0) && (Integer.parseInt(endMinute) < 60))
+            			eMinute = Integer.parseInt(endMinute);
+            		else{
+            			Agenda.getInstance().setStatusMessage("Your end time is not correct.");
+        				add = false;
+            		}
+            		
+            		if((((eHour*60)+eMinute) <= ((sHour*60)+sMinute)))
+            		{
+            			Agenda.getInstance().setStatusMessage("Your end time has to be later as your start time.");
+        				add = false;
+            		}
+            			
+            		if(add)
+            		{
+            			Agenda.getInstance().addButton(new Event(new Stage(width,height,number),new Artist(name), estimatedPop, sHour,sMinute, eHour,eMinute));
+            			Agenda.getInstance().setStatusMessage("You have succesfully entered a new event.");
+            		}
             	}
             	catch(NumberFormatException e)
             	{
