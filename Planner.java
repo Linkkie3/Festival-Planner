@@ -143,8 +143,8 @@ public class Planner extends JInternalFrame{
             		}
             		
             		int sHour = -1;
-            		if((Integer.parseInt(startHour) <= 25)){	
-            			if(Integer.parseInt(startHour) == 25)
+            		if((Integer.parseInt(startHour) <= 24)){	
+            			if(Integer.parseInt(startHour) == 24)
             				if(Integer.parseInt(startMinutes) == 0)
             					Integer.parseInt(startHour);
             				else{
@@ -165,8 +165,8 @@ public class Planner extends JInternalFrame{
             		}
 
             		int eHour = -1;
-            		if((Integer.parseInt(endHour) <= 25)){	
-            			if(Integer.parseInt(endHour) == 25)
+            		if((Integer.parseInt(endHour) <= 24)){	
+            			if(Integer.parseInt(endHour) == 24)
             			{
             				if(Integer.parseInt(endMinute) == 0)
             					eHour = Integer.parseInt(endHour);

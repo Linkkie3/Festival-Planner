@@ -268,7 +268,7 @@ public class Agenda extends JDesktopPane
 			public void actionPerformed(ActionEvent actionEvent) 
 			{
         		JOptionPane.showMessageDialog(frame,
-        	    "This application has been made by Thom Trignol. \nVersion: 2.0",
+        	    "This application has been made by Thom Trignol. \nVersion: 2.1",
         	    "About",
         	    JOptionPane.PLAIN_MESSAGE);
 			}
@@ -528,20 +528,20 @@ public class Agenda extends JDesktopPane
 		}
 
 		g.setColor(new Color(0x000000));
-    	g.drawLine(50,25,50,675);
-    	g.drawLine(900,25,900,675);
+    	g.drawLine(50,25,50,650);
+    	g.drawLine(900,25,900,650);
     	g.drawLine(50,25,900,25);
     	
-    	g.drawLine(150,25,150,675);
-    	g.drawLine(400,25,400,675);
-    	g.drawLine(650,25,650,675);
+    	g.drawLine(150,25,150,650);
+    	g.drawLine(400,25,400,650);
+    	g.drawLine(650,25,650,650);
     	
-    	for(int i = 0; i <= 25; i++)
+    	for(int i = 0; i <= 24; i++)
     	{
     		g.drawLine(50, 50+(i*25), 900, 50+(i*25));
     	}
     	
-    	for(int i = 0; i <= 24; i++)
+    	for(int i = 0; i <= 23; i++)
     	{
     		g.drawString(i+":00",50+5,50+((i+1)*25)-5);
     	}
