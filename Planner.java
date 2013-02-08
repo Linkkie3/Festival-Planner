@@ -21,6 +21,7 @@ public class Planner extends JInternalFrame{
 		super("Planner");
 		initializePanel();
 		this.setContentPane(panel);
+        //this.addKeyListener(Agenda.getInstance());
 	}
 	public void initializePanel()
 	{
@@ -211,7 +212,7 @@ public class Planner extends JInternalFrame{
 		JPanel TextFieldPanel = new JPanel(new GridLayout(9,1));
 		panel.add(TextFieldPanel, BorderLayout.EAST);
 
-		JLabel nameLabel = new JLabel("Name: ");
+		JLabel nameLabel = new JLabel("Artist Name: ");
 		JLabel stageWidthLabel = new JLabel("Stage Width: ");
 		JLabel stageHeightLabel = new JLabel("Stage Height: ");
 		JLabel stageNumberLabel = new JLabel("Stage Number: ");

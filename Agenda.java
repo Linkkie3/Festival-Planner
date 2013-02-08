@@ -8,6 +8,12 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,11 +23,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
@@ -37,6 +49,7 @@ public class Agenda extends JDesktopPane
     private JPanel dayNumberPanel;
     private ArrayList<Event> eventArrayList = new ArrayList<Event>();
     private JInternalFrame inFrame;
+    private JInternalFrame startSimulationIFrame;
     private Calendar cal;
     private Planner plannerIFrame;
     private String statusMessage = "Everything appears to be working fine.";
@@ -87,11 +100,198 @@ public class Agenda extends JDesktopPane
         plannerIFrame.setClosable(false);
         plannerIFrame.setBounds(0, 0, 350, 240);
         plannerIFrame.setIconifiable(true);  
-        plannerIFrame.setTitle("Planner");  
+        plannerIFrame.setTitle("Planner"); 
         plannerIFrame.setLocation(new Point((int)frame.getPreferredSize().getWidth() - 350, 240));
         panel.add(calendarPanel);
+        startSimulationIFrame = new JInternalFrame();
+        startSimulationIFrame.setVisible(true);
+        startSimulationIFrame.setResizable(false);
+        startSimulationIFrame.setClosable(false);
+        startSimulationIFrame.setIconifiable(true);
+        startSimulationIFrame.setTitle("Menu");
+        startSimulationIFrame.setBounds(0,0,350,180);
+        JPanel buttonPanel = new JPanel();
+        ImageIcon runImage = new ImageIcon("runButton.png");
+        ImageIcon runOverImage = new ImageIcon("runOverButton.gif");
+        JButton runButton = new JButton(runImage);
+        runButton.setRolloverIcon(runOverImage);
+        runButton.setPreferredSize(new Dimension(330,115));
+        runButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) 
+			{
+				//Code to run simulator.
+			}
+        });
+        buttonPanel.add(runButton);
+        startSimulationIFrame.setContentPane(buttonPanel);
+        startSimulationIFrame.setLocation(new Point((int)frame.getPreferredSize().getWidth() - 350, 480));
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem saveItem = new JMenuItem("Save");
+        JMenuItem openItem = new JMenuItem("Open");
+        JMenuItem quitItem = new JMenuItem("Quit");
+        saveItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) 
+			{
+				try 
+				{
+					JFileChooser chooser = new JFileChooser();
+					int option = chooser.showSaveDialog(Agenda.getInstance());
+					if(option == JFileChooser.APPROVE_OPTION)
+					{
+						File fileName = new File(chooser.getSelectedFile() + ".log");
+						BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
+						for(Event event : eventArrayList)
+						{
+							out.write(event.getArtist().getName() + "\r\n");
+							out.write(String.valueOf(event.getStage().getxLocation()) + "\r\n");
+							out.write(String.valueOf(event.getStage().getyLocation()) + "\r\n");
+							out.write(String.valueOf(event.getStage().getNumberOfStage()) + "\r\n");
+							out.write(String.valueOf(event.getEstimatedPopularity()) + "\r\n");
+							out.write(String.valueOf(event.getsHour()) + "\r\n");
+							out.write(String.valueOf(event.getsMinute()) + "\r\n");
+							out.write(String.valueOf(event.geteHour()) + "\r\n");
+							out.write(String.valueOf(event.geteMinute()) + "\r\n");
+							out.write("----------" + "\r\n");
+						}
+						out.close();
+						statusMessage = "Your file has been saved succesfully.";
+					}
+				} 
+				catch (Exception e) 
+				{
+					statusMessage = "An error has occured while writing a file.";
+				}
+			}
+        });
+        openItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) 
+			{
+				JFileChooser chooser = new JFileChooser();
+				int option = chooser.showOpenDialog(Agenda.getInstance());
+				if(option == JFileChooser.APPROVE_OPTION)
+				{
+					try {
+						String name = "";
+						int width = -1;
+						int height = -1;
+						int stageNumber = -1;
+						int estimatedPopularity = -1;
+						int sHour = -1;
+						int sMinute = -1;
+						int eHour = -1;
+						int eMinute = -1;
+						
+						int index = 0;
+						String thisLine;
+						
+						File file = chooser.getSelectedFile();
+				        FileInputStream in = new FileInputStream(file);
+				        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+				        while((thisLine = br.readLine()) != null)
+				        {
+				        	switch(index)
+				        	{
+					        	case 0:
+					        		name = thisLine;
+					        	break;
+					        	case 1:
+					        		width = Integer.parseInt(thisLine);
+					        	break;
+					        	case 2:
+					        		height = Integer.parseInt(thisLine);
+					        	break;
+					        	case 3:
+					        		stageNumber = Integer.parseInt(thisLine);
+					        	break;
+					        	case 4:
+					        		estimatedPopularity = Integer.parseInt(thisLine);
+					        	break;
+					        	case 5:
+					        		sHour = Integer.parseInt(thisLine);
+					        	break;
+					        	case 6:
+					        		sMinute = Integer.parseInt(thisLine);
+					        	break;
+					        	case 7:
+					        		eHour = Integer.parseInt(thisLine);
+					        	break;
+					        	case 8:
+					        		eMinute = Integer.parseInt(thisLine);
+					        	break;
+					        	case 9:
+					        		Event event = new Event(new Stage(width,height,stageNumber),new Artist(name), estimatedPopularity,sHour,sMinute,eHour,eMinute);
+					        		boolean addButton = true;
+					            	for(int i = 0; i < eventArrayList.size(); i++)
+					            	{
+					            		if(event.getArtist().name.equals(eventArrayList.get(i).getArtist().name));
+					            		{
+					            			if(event.getStage().getNumberOfStage() == eventArrayList.get(i).getStage().getNumberOfStage());
+					            			{
+					            				if(((eventArrayList.get(i).getsHour()*60) + (eventArrayList.get(i).getsMinute())) == ((event.getsHour()*60) + event.getsMinute()))
+					            				{
+					            					addButton = false;
+					            				}
+					            			}
+					            		}
+					            	}
+
+					        		if(addButton)
+					        		{
+					        			addButton(event);
+					        			statusMessage = "You have loaded a file succesfully.";
+					        		}
+					        	break;
+				        	}
+				        	index++;
+				        	if(index == 10)
+				        		index = 0;
+				        }
+				        br.close();
+					} catch (Exception e) {
+						statusMessage = "This file could not be loaded.";
+					}
+				}
+			}
+        });
+        quitItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) 
+			{
+				System.exit(0);
+			}
+        });
+        fileMenu.add(saveItem);
+        fileMenu.add(openItem);
+        fileMenu.add(quitItem);
+        JMenuItem aboutItem = new JMenuItem("About");
+        aboutItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) 
+			{
+        		JOptionPane.showMessageDialog(frame,
+        	    "This application has been made by Thom Trignol. \nVersion: 2.0",
+        	    "About",
+        	    JOptionPane.PLAIN_MESSAGE);
+			}
+        });
+        JMenuItem infoItem = new JMenuItem("Index");
+        infoItem.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent actionEvent) 
+			{
+        		JOptionPane.showMessageDialog(frame,
+        	    "In order to start the application, please load a preset file with events first, or create your own with the planner.\nYou can create your own by filling in the form in the planner, you can then save this by going to file, save and select the path and filename of your file.\nWhen the data has been set, please click the run button on the menu to start the simulation.",
+        	    "Index",
+        	    JOptionPane.PLAIN_MESSAGE);
+			}
+        });
+        JMenu helpMenu = new JMenu("Help");
+        helpMenu.add(aboutItem);
+        helpMenu.add(infoItem);
+        menuBar.add(fileMenu);
+        menuBar.add(helpMenu);
+        startSimulationIFrame.setJMenuBar(menuBar);
         this.add(inFrame);
         this.add(plannerIFrame);
+        this.add(startSimulationIFrame);
         panel.setBackground(new Color(-1));
         initializeJPanel();
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -350,7 +550,7 @@ public class Agenda extends JDesktopPane
     	g.drawString("Stage 1",152,48);
     	g.drawString("Stage 2",402,48);
     	g.drawString("Stage 3",652,48);
-    	g.drawString(statusMessage, 925, 670);
+    	g.drawString(statusMessage, 930, 675);
     }
 
 	public void addToArrayList(Event event) {
@@ -384,6 +584,7 @@ public class Agenda extends JDesktopPane
             			}
             		}
             	}
+            	statusMessage = "You have deleted an event.";
             }
         });
 		
@@ -406,11 +607,41 @@ public class Agenda extends JDesktopPane
 		Border border = BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		button.setBorder(border);
 		button.setBackground(new Color(0xff0000));
-		this.add(button);
-		eventArrayList.add(event);
+		button.setToolTipText("<html>" + "Artist Name: " + event.getArtist().getName() + "<br>" 
+							 + "Stage Width: " + event.getStage().getxLocation() + "<br>" 
+							 + "Stage Height: " + event.getStage().getyLocation() + "<br>"
+							 + "Stage Number: " + event.getStage().getNumberOfStage() + "<br>"
+							 + "Estimated Popularity: " + event.getEstimatedPopularity() + "<br>"
+							 + "Starting Hours: " + event.getsHour() + "<br>"
+							 + "Starting Minutes: " + event.getsMinute() + "<br>"
+							 + "Ending Hours: " + event.geteHour() + "<br>"
+							 + "Ending Minutes: " + event.geteMinute() + "<br>"
+							 + "</html>");
+		
+		boolean addButton = true;
+    	for(int i = 0; i < eventArrayList.size(); i++)
+    	{
+    		if(button.getText().equals(eventArrayList.get(i).getArtist().name));
+    		{
+    			if((((button.getX() - 150)/250)+1) == eventArrayList.get(i).getStage().getNumberOfStage())
+    			{
+    				if((((eventArrayList.get(i).getsHour() * 25) + 55) + (eventArrayList.get(i).getsMinute() * 25/60))-5 == button.getY())
+    					addButton = false;
+    			}
+    		}
+    	}
+    	if(addButton)
+		{
+    		this.add(button);
+    		eventArrayList.add(event);
+		}
+		ToolTipManager.sharedInstance().setDismissDelay(10000);
+		
+		
     }
 
 	public void setStatusMessage(String string) {
 		this.statusMessage = string;
 	}
+	
 }
