@@ -32,7 +32,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
@@ -53,12 +52,12 @@ public class Agenda extends JDesktopPane
     private Calendar cal;
     private Planner plannerIFrame;
     private String statusMessage = "Everything appears to be working fine.";
-    private javax.swing.Timer timer = new Timer(1000/60, new ActionListener(){
-        public void actionPerformed(ActionEvent e)
-        {
-        	repaint();
-        }
-    });
+    //private javax.swing.Timer timer = new Timer(1000/60, new ActionListener(){
+    //    public void actionPerformed(ActionEvent e)
+    //    {
+    //    	repaint();
+    //    }
+    //});
 
     public Agenda()
     {
@@ -67,7 +66,7 @@ public class Agenda extends JDesktopPane
         inFrame = new JInternalFrame();
         cal = Calendar.getInstance();
         plannerIFrame = new Planner();
-        timer.start();
+        //timer.start();
     }
 
     public static void main(String args[])
@@ -420,72 +419,34 @@ public class Agenda extends JDesktopPane
         cal.set(5, 1);
         int dayThatThisMonthsStarts = 0;
         String firstDayOfMonth = (new SimpleDateFormat("EEEEEEEEEE")).format(Long.valueOf(cal.getTimeInMillis()));
-        int day = -1;
         switch(firstDayOfMonth)
         {
         case "maandag": 
-            if(firstDayOfMonth.equals("maandag"))
-                day = 0;
-            break;
-
-        case "dinsdag": 
-            if(firstDayOfMonth.equals("dinsdag"))
-                day = 1;
-            break;
-
-        case "woensdag": 
-            if(firstDayOfMonth.equals("woensdag"))
-                day = 2;
-            break;
-
-        case "donerdag": 
-            if(firstDayOfMonth.equals("donderdag"))
-                day = 3;
-            break;
-
-        case "vrijdag": 
-            if(firstDayOfMonth.equals("vrijdag"))
-                day = 4;
-            break;
-
-        case "zaterdag": 
-            if(firstDayOfMonth.equals("zaterdag"))
-                day = 5;
-            break;
-
-        case "zondag": 
-            if(firstDayOfMonth.equals("zondag"))
-                day = 6;
-            break;
-        }
-        switch(day)
-        {
-        case 0: // '\0'
             dayThatThisMonthsStarts = 0;
             break;
 
-        case 1: // '\001'
-            dayThatThisMonthsStarts = 1;
+        case "dinsdag": 
+        	dayThatThisMonthsStarts = 1;
             break;
 
-        case 2: // '\002'
-            dayThatThisMonthsStarts = 2;
+        case "woensdag": 
+        	dayThatThisMonthsStarts = 2;
             break;
 
-        case 3: // '\003'
-            dayThatThisMonthsStarts = 3;
+        case "donderdag": 
+        	dayThatThisMonthsStarts = 3;
             break;
 
-        case 4: // '\004'
-            dayThatThisMonthsStarts = 4;
+        case "vrijdag": 
+        	dayThatThisMonthsStarts = 4;
             break;
 
-        case 5: // '\005'
-            dayThatThisMonthsStarts = 5;
+        case "zaterdag": 
+        	dayThatThisMonthsStarts = 5;
             break;
 
-        case 6: // '\006'
-            dayThatThisMonthsStarts = 6;
+        case "zondag": 
+        	dayThatThisMonthsStarts = 6;
             break;
         }
         cal.set(2, cal.get(2) - 1);
