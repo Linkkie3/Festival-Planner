@@ -529,23 +529,34 @@ public class Agenda extends JDesktopPane
 		button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionevent)
             {
-            	Container parent = button.getParent();
-            	parent.remove(button);
-            	((JComponent) parent).revalidate();
-            	parent.repaint();
-            	parent.validate();
-            	for(int i = 0; i < eventArrayList.size(); i++)
+            	boolean areYouSure = false;
+            	int n = JOptionPane.showConfirmDialog(
+            		    frame,
+            		    "Would you like to remove this event?",
+            		    "Confirmation",
+            		    JOptionPane.YES_NO_OPTION);
+            	if(n == 0)
+            		areYouSure = true;
+            	if(areYouSure)
             	{
-            		if(button.getText().equals(eventArrayList.get(i).getArtist().name));
-            		{
-            			if((((button.getX() - 150)/250)+1) == eventArrayList.get(i).getStage().getNumberOfStage())
-            			{
-            				if((((eventArrayList.get(i).getsHour() * 25) + 55) + (eventArrayList.get(i).getsMinute() * 25/60))-5 == button.getY())
-            					eventArrayList.remove(i);
-            			}
-            		}
+	            	Container parent = button.getParent();
+	            	parent.remove(button);
+	            	((JComponent) parent).revalidate();
+	            	parent.repaint();
+	            	parent.validate();
+	            	for(int i = 0; i < eventArrayList.size(); i++)
+	            	{
+	            		if(button.getText().equals(eventArrayList.get(i).getArtist().name));
+	            		{
+	            			if((((button.getX() - 150)/250)+1) == eventArrayList.get(i).getStage().getNumberOfStage())
+	            			{
+	            				if((((eventArrayList.get(i).getsHour() * 25) + 55) + (eventArrayList.get(i).getsMinute() * 25/60))-5 == button.getY())
+	            					eventArrayList.remove(i);
+	            			}
+	            		}
+	            	}
+	            	statusMessage = "You have deleted an event.";
             	}
-            	statusMessage = "You have deleted an event.";
             }
         });
 		
