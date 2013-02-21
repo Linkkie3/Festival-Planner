@@ -52,12 +52,6 @@ public class Agenda extends JDesktopPane
     private Calendar cal;
     private Planner plannerIFrame;
     private String statusMessage = "Everything appears to be working fine.";
-    //private javax.swing.Timer timer = new Timer(1000/60, new ActionListener(){
-    //    public void actionPerformed(ActionEvent e)
-    //    {
-    //    	repaint();
-    //    }
-    //});
 
     public Agenda()
     {
@@ -66,7 +60,6 @@ public class Agenda extends JDesktopPane
         inFrame = new JInternalFrame();
         cal = Calendar.getInstance();
         plannerIFrame = new Planner();
-        //timer.start();
     }
 
     public static void main(String args[])
@@ -267,7 +260,7 @@ public class Agenda extends JDesktopPane
 			public void actionPerformed(ActionEvent actionEvent) 
 			{
         		JOptionPane.showMessageDialog(frame,
-        	    "This application has been made by Thom Trignol. \nVersion: 2.1",
+        	    "This application has been made by Thom Trignol. \nVersion: 2.3",
         	    "About",
         	    JOptionPane.PLAIN_MESSAGE);
 			}
